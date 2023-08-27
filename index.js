@@ -9,8 +9,8 @@ const UserModel = require('./models/User.js');
 const env = dotenv.config().parsed
 const PORT = process.env.PORT || 3000
 const config = {
-    channelAccessToken: process.env.ACCESSTOKEN ,
-    channelSecret: process.env.SECRET_TOKEN
+    channelAccessToken: '8E+D2PdWMA3T3cnPpyGWVbDAjN/IGQcU9cTMZOsCfcGpajFvrp6LFYYrOVISg1IiSrgIkZVFqxwkQPLRuFtwQU4XD+/osCF2H7wb90tJP0bv4rqQfD+DmitxxvpzrBIK7Cd+Q2zLdAoyPigIMaByJAdB04t89/1O/w1cDnyilFU= ',
+    channelSecret: 'e0d8a6c5a63370f5769d8acc9935b0d2'
 }
 
 const mongoDB = "mongodb+srv://chokilover3:saharat4wichian5@eggboild.urpox3k.mongodb.net/eggboild";
