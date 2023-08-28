@@ -66,7 +66,7 @@ app.post('/webhook/almostfinished/:id' , (req,res) =>{
 app.post("/createUser" , (req , res) =>{
     UserModel.create({})
     .then(user =>{
-        res.json(user)
+        res.json(user._id)
         res.send({id : user._id})
     })
     .catch(err => res.json(err))
