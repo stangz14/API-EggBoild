@@ -43,6 +43,11 @@ app.post("/webhook/send/success/:id", async (req, res) => {
         .then(user => {
             console.log(user)
             client.pushMessage(user?.userID, { type: 'text', text: 'ไข่สุก!!!!!!!' })
+            UserModel.deleteOne({_id : user?._id})
+            .then(user => {
+
+            })
+            .catch(err => console.log(err))
         })
         .catch(err => console.log(err))
 })
@@ -72,7 +77,7 @@ app.get('/getUser/:id' , (req , res) =>{
     UserModel.findById({ _id: id })
         .then(user => {
             console.log(user)
-            res.send({userID : user.userID})
+            res.send(user._id)
         })
         .catch(err => console.log(err))
 })
