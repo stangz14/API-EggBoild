@@ -42,7 +42,8 @@ app.post("/webhook/send/success/:id", async (req, res) => {
     UserModel.findById({ _id: id })
         .then(user => {
             console.log(user)
-            client.pushMessage(user?.userID, { type: 'text', text: 'ไข่สุก!!!!!!!' })
+            client.pushMessage(user?.userID, { type: 'text', text: 'ไข่ของคุณสุกแล้วนะ โปรดไปรับด้วย' })
+            client.pushMessage(user?.userID, { type: 'text', text: 'ขอบคุณสำหรับการใช้บริการของเรา' })
             UserModel.deleteOne({_id : user?._id})
             .then(user => {
                 res.json(user)
@@ -92,13 +93,13 @@ const handleEvent = async (event) => {
             .then(users => {
                 if (users.length > 0) {
                     console.log("Have User")
-                    client.replyMessage(event.replyToken, { type: "text", text: "Have User" })
+                    client.replyMessage(event.replyToken, { type: "text", text: "บัญชีนี้ได้มีการลงทะเบียนสำเร็จแล้ว" })
                 } else {
                     console.log("not User")
                     UserModel.findByIdAndUpdate({ _id: id }, { userID: event.source.userId })
                         .then(users => {
                             console.log(users)
-                            client.replyMessage(event.replyToken, { type: "text", text: "success" })
+                            client.replyMessage(event.replyToken, { type: "text", text: "ลงทะเบียนสำเร็จ โปรดรอรับไข่ได้เลย" })
                         })
                         .catch(err => console.log(err))
 
