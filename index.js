@@ -45,7 +45,7 @@ app.post("/webhook/send/success/:id", async (req, res) => {
             client.pushMessage(user?.userID, { type: 'text', text: 'ไข่สุก!!!!!!!' })
             UserModel.deleteOne({_id : user?._id})
             .then(user => {
-
+                res.json(user)
             })
             .catch(err => console.log(err))
         })
@@ -59,6 +59,7 @@ app.post('/webhook/almostfinished/:id' , (req,res) =>{
         .then(user => {
             console.log(user)
             client.pushMessage(user?.userID, { type: 'text', text: 'ไข่ใกล้สุกแล้วเหลือเวลาอีกไม่ถึง 1 นาที 30 วินาที' })
+            res.json("success pushmessage")
         })
         .catch(err => console.log(err))
 })
