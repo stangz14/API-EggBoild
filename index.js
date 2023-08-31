@@ -109,7 +109,7 @@ const handleEvent = async (event) => {
 
     } else {
         console.log(event);
-        client.replyMessage(event.replyToken, { type: 'text', text: "kuy" })
+        client.replyMessage(event.replyToken, { type: 'text', text: "คำสั่งผิดพลาดโปรดลองอีกครั้ง" })
     }
 
 }
