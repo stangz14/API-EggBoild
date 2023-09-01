@@ -89,28 +89,30 @@ const handleEvent = async (event) => {
     const id = event.message.text.slice(5, 29)
     if (event.type === 'message' && event.message.type === 'text' && key === "Login") {
         console.log(event);
-        UserModel.find({ userID: event.source.userId })
-            .then(users => {
-                if (users.length > 0) {
-                    console.log("Have User")
-                    client.replyMessage(event.replyToken, { type: "text", text: "บัญชีนี้ได้มีการลงทะเบียนสำเร็จแล้ว" })
-                } else {
-                    console.log("not User")
-                    UserModel.findByIdAndUpdate({ _id: id }, { userID: event.source.userId })
-                        .then(user => {
-                            if (user.length > 0) {
-                                console.log(user)
-                                client.replyMessage(event.replyToken, { type: "text", text: "ลงทะเบียนสำเร็จ โปรดรอรับไข่ได้เลย" })
+        UserModel.findById({ _id: id })
+            .then(user => {
+                console.log(user?.userID?.length)
+                if (user?.userID?.length > 0) {
+                    client.replyMessage(event.replyToken, { type: "text", text: "เครื่องต้นไข่เครื่องนี้ ได้รับการลงทะเบียนกับบัญชีไลน์อื่นไว้แล้ว" })
+                }
+                else {
+                    UserModel.find({ userID: event.source.userId })
+                        .then(checkuser => {
+                            if (checkuser.length > 0) {
+                                client.replyMessage(event.replyToken, { type: "text", text: "บัญชีนี้ได้มีการลงทะเบียนสำเร็จแล้ว" })
                             } else {
-                                console.log(user)
-                                client.replyMessage(event.replyToken, { type: "text", text: "รหัสลงทะเบียนผิดพลาดโปรดตรวจสอบอีกครั้ง" })
+
+                                UserModel.findByIdAndUpdate({ _id: id }, { userID: event.source.userId })
+                                    .then(newuser => {
+                                        client.replyMessage(event.replyToken, { type: "text", text: "ลงทะเบียนสำเร็จ โปรดรอรับไข่ได้เลย" })
+                                    })
+                                    .catch(err => console.log(err))
                             }
                         })
                         .catch(err => console.log(err))
-
                 }
             })
-            .catch(err => console.log(err))
+            .catch(err => client.replyMessage(event.replyToken, { type: "text", text: "รหัสลงทะเบียนผิดพลาดโปรดตรวจสอบอีกครั้ง" }))
 
     } else {
         console.log(event);
