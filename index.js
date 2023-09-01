@@ -9,8 +9,8 @@ const UserModel = require('./models/User.js');
 const env = dotenv.config().parsed
 const PORT = process.env.PORT || 3000
 const config = {
-    channelAccessToken: '8E+D2PdWMA3T3cnPpyGWVbDAjN/IGQcU9cTMZOsCfcGpajFvrp6LFYYrOVISg1IiSrgIkZVFqxwkQPLRuFtwQU4XD+/osCF2H7wb90tJP0bv4rqQfD+DmitxxvpzrBIK7Cd+Q2zLdAoyPigIMaByJAdB04t89/1O/w1cDnyilFU= ',
-    channelSecret: 'e0d8a6c5a63370f5769d8acc9935b0d2'
+    channelAccessToken: 'WOvfI/Jjc6C5rhij80a4k/3DIuzT9PGvBUSylzM0BAhXJDiIkcvn8Uxmpgg9ryiEsICTpQdDikEu7yvATF7bF5mcZdB6tdcXHbP23LYars9cI1CVmf4soDspEVe2t+TdgBndXj1JTKiXG1zILH4emAdB04t89/1O/w1cDnyilFU=',
+    channelSecret: 'bcb41772584d2afddc08df4e41f8823b'
 }
 
 const mongoDB = "mongodb+srv://chokilover3:saharat4wichian5@eggboild.urpox3k.mongodb.net/eggboild";
@@ -44,17 +44,17 @@ app.post("/webhook/send/success/:id", async (req, res) => {
             console.log(user)
             client.pushMessage(user?.userID, { type: 'text', text: 'ไข่ของคุณสุกแล้วนะ โปรดไปรับด้วย' })
             client.pushMessage(user?.userID, { type: 'text', text: 'ขอบคุณสำหรับการใช้บริการของเรา' })
-            UserModel.deleteOne({_id : user?._id})
-            .then(user => {
-                res.json(user)
-            })
-            .catch(err => console.log(err))
+            UserModel.deleteOne({ _id: user?._id })
+                .then(user => {
+                    res.json(user)
+                })
+                .catch(err => console.log(err))
         })
         .catch(err => console.log(err))
 })
 
 
-app.post('/webhook/almostfinished/:id' , (req,res) =>{
+app.post('/webhook/almostfinished/:id', (req, res) => {
     const id = req.params.id;
     UserModel.findById({ _id: id })
         .then(user => {
@@ -65,16 +65,16 @@ app.post('/webhook/almostfinished/:id' , (req,res) =>{
         .catch(err => console.log(err))
 })
 
-app.post("/createUser" , (req , res) =>{
+app.post("/createUser", (req, res) => {
     UserModel.create({})
-    .then(user =>{
-        res.json("https://line.me/R/oaMessage/@709hyfzh?Login" + user._id)
-        res.send({id : user._id})
-    })
-    .catch(err => res.json(err))
+        .then(user => {
+            res.json("https://line.me/R/oaMessage/@889zwavc?Login" + user._id)
+            res.send({ id: user._id })
+        })
+        .catch(err => res.json(err))
 })
 
-app.get('/getUser/:id' , (req , res) =>{
+app.get('/getUser/:id', (req, res) => {
     const id = req.params.id;
     UserModel.findById({ _id: id })
         .then(user => {
@@ -97,9 +97,14 @@ const handleEvent = async (event) => {
                 } else {
                     console.log("not User")
                     UserModel.findByIdAndUpdate({ _id: id }, { userID: event.source.userId })
-                        .then(users => {
-                            console.log(users)
-                            client.replyMessage(event.replyToken, { type: "text", text: "ลงทะเบียนสำเร็จ โปรดรอรับไข่ได้เลย" })
+                        .then(user => {
+                            if (user.length > 0) {
+                                console.log(user)
+                                client.replyMessage(event.replyToken, { type: "text", text: "ลงทะเบียนสำเร็จ โปรดรอรับไข่ได้เลย" })
+                            } else {
+                                console.log(user)
+                                client.replyMessage(event.replyToken, { type: "text", text: "รหัสลงทะเบียนผิดพลาดโปรดตรวจสอบอีกครั้ง" })
+                            }
                         })
                         .catch(err => console.log(err))
 
